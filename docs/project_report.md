@@ -4,9 +4,10 @@
 
 **Project Title:** DocuVision: Automatic Document Scanner and Quality Analyzer  
 **Course Area:** Computer Vision  
-**Project Type:** Image processing and document analysis  
-**Submitted By:** Student Name / Registration Number  
-**Repository:** GitHub repository link to be added after upload
+**Project Type:** Image Processing and Document Analysis  
+**Submitted By:** Abhiral Jain  
+**Registration Number:** 24BAI10677  
+**Repository:** [https://github.com/AbhiralJain07/Computer-Vision-24BAI10677](https://github.com/AbhiralJain07/Computer-Vision-24BAI10677)
 
 ## 2. Introduction
 
