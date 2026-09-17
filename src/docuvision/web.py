@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import argparse
-import cgi
+import email.policy
+from email.parser import BytesParser
 import json
 import mimetypes
 import os
@@ -536,21 +537,26 @@ class DocuVisionHandler(BaseHTTPRequestHandler):
             _json(self, HTTPStatus.BAD_REQUEST, {"error": "Upload must be between 1 byte and 12 MB."})
             return
 
-        form = cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={
-                "REQUEST_METHOD": "POST",
-                "CONTENT_TYPE": self.headers.get("Content-Type", ""),
-                "CONTENT_LENGTH": str(content_length),
-            },
-        )
-        item = form["media"] if "media" in form else None
-        if item is None or not item.filename:
+        content_type = self.headers.get("Content-Type", "")
+        raw_body = self.rfile.read(content_length)
+
+        msg_bytes = f"Content-Type: {content_type}\r\n\r\n".encode("latin-1") + raw_body
+        msg = BytesParser(policy=email.policy.default).parsebytes(msg_bytes)
+
+        file_bytes = None
+        filename = None
+
+        for part in msg.iter_parts():
+            if part.get_param("name", header="content-disposition") == "media":
+                filename = part.get_filename()
+                file_bytes = part.get_payload(decode=True)
+                break
+
+        if not filename or file_bytes is None:
             _json(self, HTTPStatus.BAD_REQUEST, {"error": "No image file was uploaded."})
             return
 
-        extension = Path(item.filename).suffix.lower()
+        extension = Path(filename).suffix.lower()
         if extension not in ALLOWED_EXTENSIONS:
             _json(self, HTTPStatus.BAD_REQUEST, {"error": "Unsupported image type."})
             return
@@ -558,7 +564,7 @@ class DocuVisionHandler(BaseHTTPRequestHandler):
         run_id = uuid.uuid4().hex[:12]
         UPLOADS.mkdir(parents=True, exist_ok=True)
         upload_path = UPLOADS / f"{run_id}{extension}"
-        upload_path.write_bytes(item.file.read())
+        upload_path.write_bytes(file_bytes)
 
         output_dir = UI_RUNS / run_id
         try:

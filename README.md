@@ -39,47 +39,91 @@ docs/
   diagrams/           Architecture, workflow, use case, class, sequence, ER notes
 ```
 
-## Installation
+## Installation & Setup
 
+### macOS / Linux
+
+#### Option A: Using Conda (Recommended if using Anaconda / Miniconda)
+If your terminal shows `(base)`, you can run directly using Conda:
 ```bash
-python -m venv .venv
-.venv\Scripts\activate
-python -m pip install -r requirements.txt
-python -m pip install -e .
-```
+# Install dependencies into your active environment
+pip install -r requirements.txt
+pip install -e .
 
-## Run the Upload UI
-
-Start the complete project:
-
-```bash
+# Run the app
 python main.py
 ```
 
-Open `http://127.0.0.1:8000` in a browser, upload a document image, and the UI will display the scanned document, quality metrics, and visual report.
-
-## Run the Command-Line Demo
-
+#### Option B: Using standard Python venv
 ```bash
-python main.py --cli
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+python3 main.py
 ```
 
-To process your own image from the terminal:
+### Windows
+
+1. **Create and activate a virtual environment**:
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   python -m pip install -r requirements.txt
+   python -m pip install -e .
+   ```
+
+## Usage
+
+> **Note:** Ensure your virtual environment is active before running commands (`source .venv/bin/activate` on macOS/Linux or `.venv\Scripts\activate` on Windows).
+
+### 1. Run the Web Upload UI
+
+Start the application server:
 
 ```bash
-python main.py --cli --input path/to/document.jpg
+# macOS / Linux
+python3 main.py
+
+# Windows
+python main.py
 ```
 
-Generated files:
+Open **`http://127.0.0.1:8000`** in your browser (Safari, Chrome, etc.), upload a document photo, and the UI will display:
+- The scanned and perspective-corrected document
+- Real-time quality metrics (Brightness, Contrast, Sharpness, Skew angle)
+- Step-by-step visual pipeline report
 
-- `outputs/scanned_document.png`
-- `outputs/visual_report.png`
-- `outputs/quality_report.json`
+### 2. Run the Command-Line Interface (CLI)
+
+Run the demo on the built-in sample document:
+
+```bash
+python3 main.py --cli
+```
+
+To process your own image directly from the terminal:
+
+```bash
+python3 main.py --cli --input path/to/document.jpg
+```
+
+Generated files are saved to the `outputs/` directory:
+
+- `outputs/scanned_document.png` - Final enhanced scan
+- `outputs/visual_report.png` - Multi-stage pipeline visualization
+- `outputs/quality_report.json` - Numerical quality evaluation & validation report
 
 ## Testing
 
+Run unit tests to verify the computer vision pipeline:
+
 ```bash
-python -m unittest discover -s tests
+python3 -m unittest discover -s tests
 ```
 
 ## Screenshots / Results
