@@ -1,4 +1,4 @@
-"""One-command runner for the DocuVision project."""
+"""One-command runner for the PaperPulse project."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ def _ensure_import_path() -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Run the complete DocuVision document scanner project."
+        description="Run the complete PaperPulse document scanner project."
     )
     parser.add_argument(
         "--input",
@@ -71,12 +71,12 @@ def run_tests() -> int:
 
 
 def run_scan(input_path: Path | None, output_dir: str) -> None:
-    from docuvision.cli import run
+    from paperpulse.cli import run
     from scripts.generate_sample import create_sample
 
     selected_input = input_path if input_path else create_sample(ROOT / "samples" / "sample_document.jpg")
 
-    print("DocuVision: Automatic Document Scanner and Quality Analyzer")
+    print("PaperPulse: Automatic Document Scanner and Quality Analyzer")
     print(f"Input image: {selected_input}")
     print(f"Output directory: {output_dir}\n")
 
@@ -105,7 +105,7 @@ def main() -> int:
     if input_path:
         run_scan(input_path, args.output_dir)
 
-    from docuvision.web import serve
+    from paperpulse.web import serve
 
     serve(args.host, args.port)
     return 0

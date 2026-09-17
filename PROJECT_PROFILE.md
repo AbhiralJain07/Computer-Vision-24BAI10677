@@ -2,7 +2,7 @@
 
 ## Project Title
 
-DocuVision: Automatic Document Scanner and Quality Analyzer
+PaperPulse: Automatic Document Scanner and Quality Analyzer
 
 ## Problem Statement
 

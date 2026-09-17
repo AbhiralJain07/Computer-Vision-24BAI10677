@@ -3,11 +3,11 @@ import unittest
 import cv2
 import numpy as np
 
-from docuvision.quality import analyze_quality
-from docuvision.scanner import find_document_contour, four_point_transform, order_points, scan_document
+from paperpulse.quality import analyze_quality
+from paperpulse.scanner import find_document_contour, four_point_transform, order_points, scan_document
 
 
-class DocuVisionTests(unittest.TestCase):
+class PaperPulseTests(unittest.TestCase):
     def test_order_points_returns_expected_corners(self):
         points = np.array([[[100, 100]], [[20, 20]], [[110, 20]], [[30, 110]]], dtype=np.float32)
         ordered = order_points(points)
@@ -32,7 +32,7 @@ class DocuVisionTests(unittest.TestCase):
         edges = np.zeros((300, 300), dtype=np.uint8)
         cv2.rectangle(edges, (45, 50), (250, 260), 255, 3)
 
-        contour, fallback = find_document_contour(edges, config=__import__("docuvision.config").config.ScannerConfig())
+        contour, fallback = find_document_contour(edges, config=__import__("paperpulse.config").config.ScannerConfig())
 
         self.assertFalse(fallback)
         self.assertEqual(len(contour), 4)

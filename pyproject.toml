@@ -1,5 +1,5 @@
 [project]
-name = "docuvision-scanner"
+name = "paperpulse-scanner"
 version = "1.0.0"
 description = "Computer vision project for automatic document scanning and capture quality analysis."
 requires-python = ">=3.10"

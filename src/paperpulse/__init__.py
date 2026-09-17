@@ -1,4 +1,4 @@
-"""DocuVision document scanning and quality analysis package."""
+"""PaperPulse document scanning and quality analysis package."""
 
 __all__ = [
     "config",

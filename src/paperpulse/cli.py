@@ -1,4 +1,4 @@
-"""Command-line interface for DocuVision."""
+"""Command-line interface for PaperPulse."""
 
 from __future__ import annotations
 

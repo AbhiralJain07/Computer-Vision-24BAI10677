@@ -1,4 +1,4 @@
-# DocuVision: Automatic Document Scanner and Quality Analyzer
+# PaperPulse: Automatic Document Scanner and Quality Analyzer
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.8%2B-green.svg?logo=opencv&logoColor=white)](https://opencv.org/)
@@ -29,12 +29,12 @@ When users take photos of physical documents (receipts, notes, official forms, c
 3. **Irrelevant Cluttered Backgrounds** (desks, hands, surfaces).
 4. **Motion Blur or Defocus** degrading text legibility.
 
-### 💡 The Solution: DocuVision
-**DocuVision** is an automated Classical Computer Vision system that transforms raw, skewed document photos into clean, flat, high-contrast digital scans. Furthermore, it performs an objective **Image Quality Assessment (IQA)** evaluating sharpness, brightness, contrast, and skew to inform the user whether the scan is legible or requires recapture.
+### 💡 The Solution: PaperPulse
+**PaperPulse** is an automated Classical Computer Vision system that transforms raw, skewed document photos into clean, flat, high-contrast digital scans. Furthermore, it performs an objective **Image Quality Assessment (IQA)** evaluating sharpness, brightness, contrast, and skew to inform the user whether the scan is legible or requires recapture.
 
 ```
 +--------------------------+        +---------------------------+        +--------------------------+
-|       Input Photo        |  --->  |    DocuVision Pipeline    |  --->  |      Final Artifacts     |
+|       Input Photo        |  --->  |    PaperPulse Pipeline    |  --->  |      Final Artifacts     |
 | (Tilted, Shadow, Clutter)|        | (Detect -> Warp -> Enhance|        | (Clean Scan + Metrics)   |
 +--------------------------+        +---------------------------+        +--------------------------+
 ```
@@ -84,7 +84,7 @@ flowchart TD
 ```text
 Computer-Vision-24BAI10677/
 ├── src/
-│   └── docuvision/
+│   └── paperpulse/
 │       ├── __init__.py         # Package initialization
 │       ├── cli.py              # CLI entry point and pipeline orchestrator
 │       ├── config.py           # Central configuration thresholds and settings
@@ -97,7 +97,7 @@ Computer-Vision-24BAI10677/
 ├── scripts/
 │   └── generate_sample.py      # Synthetic test image generator
 ├── tests/
-│   └── test_docuvision.py      # Automated unit tests for CV functions
+│   └── test_paperpulse.py      # Automated unit tests for CV functions
 ├── docs/
 │   ├── project_report.md       # Full academic project report
 │   └── diagrams/               # Architecture, workflow, and sequence diagrams
@@ -175,9 +175,9 @@ python -m pip install -e .
 
 ---
 
-## ⚙️ 7. Configuration (`src/docuvision/config.py`)
+## ⚙️ 7. Configuration (`src/paperpulse/config.py`)
 
-All core thresholds and parameters are centrally managed in `src/docuvision/config.py`. You can modify these values or pass custom dataclasses during runtime:
+All core thresholds and parameters are centrally managed in `src/paperpulse/config.py`. You can modify these values or pass custom dataclasses during runtime:
 
 ### Scanner Settings (`ScannerConfig`)
 | Parameter | Default | Description |
@@ -339,7 +339,7 @@ After processing an image (via Web UI or CLI), results are saved in the `outputs
   Then open `http://127.0.0.1:8080`.
 
 ### Q3: Python 3.13 `cgi` module error
-- **Fix**: PEP 594 removed the `cgi` module in Python 3.13. DocuVision's web server uses Python's standard `email.parser.BytesParser` to ensure full compatibility with Python 3.10, 3.11, 3.12, and 3.13+.
+- **Fix**: PEP 594 removed the `cgi` module in Python 3.13. PaperPulse's web server uses Python's standard `email.parser.BytesParser` to ensure full compatibility with Python 3.10, 3.11, 3.12, and 3.13+.
 
 ---
 
