@@ -394,30 +394,30 @@ erDiagram
 
 # 7. OpenCV Implementation Details
 
-The codebase is organized into modular Python files under [`src/paperpulse/`](file:///Users/abhiraljain/Downloads/DocuVision--main/src/paperpulse):
+The codebase is organized into modular Python files under [`src/paperpulse/`](src/paperpulse/):
 
-### 7.1 [`io_utils.py`](file:///Users/abhiraljain/Downloads/DocuVision--main/src/paperpulse/io_utils.py)
+### 7.1 [`io_utils.py`](src/paperpulse/io_utils.py)
 - `read_image(path)`: Robust reading using `cv2.imread()`, verifying image validity and raising an informative `IOError` if unreadable.
 - `resize_to_height(image, target_height)`: Calculates isotropic scaling factor $s = \frac{H_{\text{target}}}{H_{\text{original}}}$ and resizes using area interpolation `cv2.INTER_AREA` to stabilize edge detection thresholds across varying camera megapixel resolutions.
 - `write_image(path, image)`: Ensures parent output directories exist and safely encodes images via `cv2.imwrite()`.
 
-### 7.2 [`preprocessing.py`](file:///Users/abhiraljain/Downloads/DocuVision--main/src/paperpulse/preprocessing.py)
+### 7.2 [`preprocessing.py`](src/paperpulse/preprocessing.py)
 - `to_grayscale(image)`: Converts 3-channel BGR images to 1-channel luminance via `cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)`.
 - `detect_edges(image, config)`: Applies Gaussian filtering (`cv2.GaussianBlur`) with a $5 \times 5$ kernel, executes Canny edge detection with hysteresis thresholds ($T_{\text{low}}=50, T_{\text{high}}=160$), and dilates edges using a $3 \times 3$ structuring element (`cv2.dilate`) to bridge contour breaks.
 - `enhance_document(image, config)`: Applies Fast Non-Local Means Denoising (`cv2.fastNlMeansDenoising`), passes the result to Contrast Limited Adaptive Histogram Equalization (`cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))`), and produces a binary scan using `cv2.adaptiveThreshold(..., cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 12)`.
 
-### 7.3 [`scanner.py`](file:///Users/abhiraljain/Downloads/DocuVision--main/src/paperpulse/scanner.py)
+### 7.3 [`scanner.py`](src/paperpulse/scanner.py)
 - `order_points(points)`: Reshapes points into a $(4, 2)$ array, projects coordinates via sum $(x+y)$ and difference $(y-x)$ to reliably assign Top-Left, Top-Right, Bottom-Right, and Bottom-Left vertices.
 - `four_point_transform(image, points, output_width)`: Computes Euclidean norms for top/bottom widths and left/right heights, determines the natural output aspect ratio, defines the destination rectangle, derives the homography matrix $M = \text{cv2.getPerspectiveTransform}(\text{src}, \text{dst})$, and warps the original high-resolution image using `cv2.warpPerspective`.
 - `find_document_contour(edges, config)`: Finds external contours via `cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)`, sorts contours by area, iterates through candidates filtering for area $\ge 0.18 \times A_{\text{image}}$, and applies `cv2.approxPolyDP` with $\epsilon = 0.02 \times \text{Perimeter}$. If a 4-vertex polygon is found, it returns the contour; otherwise, it activates `_fallback_contour`.
 
-### 7.4 [`quality.py`](file:///Users/abhiraljain/Downloads/DocuVision--main/src/paperpulse/quality.py)
+### 7.4 [`quality.py`](src/paperpulse/quality.py)
 - `_estimate_skew(gray)`: Computes Canny edges, extracts dominant line segments via the Standard Hough Transform `cv2.HoughLines(edges, 1, np.pi/180, 120)`, filters line angles to $[-45^\circ, +45^\circ]$, and computes the median angle.
 - `analyze_quality(image, thresholds)`: Calculates Mean Intensity $\mu = \text{np.mean}(I)$, Dynamic Contrast $\sigma = \text{np.std}(I)$, and Sharpness via the Variance of Laplacian:
   $$\text{Sharpness} = \text{Var}\left(\text{cv2.Laplacian}(I, \text{cv2.CV\_64F})\right)$$
   Evaluates values against defined operational thresholds and constructs a diagnostic message list.
 
-### 7.5 [`report.py`](file:///Users/abhiraljain/Downloads/DocuVision--main/src/paperpulse/report.py)
+### 7.5 [`report.py`](src/paperpulse/report.py)
 - `create_visual_report(result, quality, output_path)`: Composes four standardized panels (`1. Input + Contour`, `2. Edge Map`, `3. Perspective Corrected`, `4. Enhanced Output`), merges them into a $2 \times 2$ grid, adds a footer banner with quality metrics and PASS/REVIEW status, and writes `outputs/visual_report.png`.
 - `save_json_report(quality, output_path)`: Serializes structured metrics into `outputs/quality_report.json`.
 
